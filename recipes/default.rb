@@ -146,6 +146,7 @@ application "docker-registry" do
     application_port node['docker-registry']['internal_port']
     application_server_role node['docker-registry']['application_server_role']
     server_name (node['docker-registry']['server_name'] || node['fqdn'] || node['hostname'])
+    hosts node['opsworks']['layers'][node['docker-registry']['layer_name']]['instances'].map {|instance_name, instance| {'ipaddress' => instance['ip']}}
     template "load_balancer.conf.erb"
     ssl node['docker-registry']['ssl']
     ssl_certificate certificate_path
